@@ -36,8 +36,9 @@ A full-stack e-commerce platform for buying and managing jewellery, built with N
 ---
 
 ## 🔗 Folder Structure
+---
 
-jewellery-ecommerce/
+- jewellery-ecommerce/
 ├── admin/ # Admin dashboard files
 ├── client/ # Frontend website
 ├── server/ # Backend logic and API routes
