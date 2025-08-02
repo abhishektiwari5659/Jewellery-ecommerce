@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    background: #e3edf7;
+    color: #333;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 270px;
+    background: #1e1e2f;
+    color: #fff;
+    height: 100vh;
+    padding: 25px;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar h2 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #00d4ff;
+    letter-spacing: 1px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.sidebar ul li a {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: #2a2a3a;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.1),
+                inset -2px -2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar ul li a:hover {
+    background: #00d4ff;
+    color: #1e1e2f;
+    box-shadow: 0px 0px 8px rgba(0, 212, 255, 0.7);
+    transform: translateY(-2px);
+}
+
+
+/* Main Content */
+.main-content {
+    margin-left: 270px;
+    padding: 40px;
+    width: calc(100% - 270px);
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #2a2a3a;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Dashboard Cards */
+.dashboard-cards {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.card {
+    flex: 1;
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    background: linear-gradient(45deg, #00d4ff, #007bff);
+    top: -50%;
+    left: -50%;
+    transform: rotate(25deg);
+    opacity: 0.15;
+    z-index: 0;
+}
+
+.card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    position: relative;
+    z-index: 1;
+}
+
+.card p {
+    font-size: 22px;
+    font-weight: bold;
+    color: #00a8ff;
+    margin-top: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Sections */
+.hidden {
+    display: none !important;
+}
+
+.section-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.section-item {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    flex: 1 1 calc(50% - 20px);
+    min-width: 300px;
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+}
+.section-item img {
+    width: 100px;  /* Adjust to a reasonable size */
+    height: auto;   /* Maintain aspect ratio */
+    display: block;
+    margin-top: 10px;
+    border-radius: 8px;  /* Add smooth corners */
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);  /* Subtle shadow */
+}
+
+.section-item:hover {
+    transform: translateY(-4px);
+}
+
+/* Charts */
+.chart-container {
+    width: 100%;
+    max-width: 850px;
+    margin: auto;
+    padding: 25px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+    margin-top: 25px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.chart-container:hover {
+    transform: translateY(-5px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    .main-content {
+        margin-left: 200px;
+        width: calc(100% - 200px);
+    }
+
+    .dashboard-cards {
+        flex-direction: column;
+    }
+
+    .chart-container {
+        max-width: 100%;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Admin Menu</h2>
+        <ul>
+            <li><a onclick="showSection('dashboard')">Dashboard</a></li>
+            <li><a onclick="showSection('products')">Products</a></li>
+            <li><a onclick="showSection('categories')">Categories</a></li>
+            <li><a onclick="showSection('orders')">Orders</a></li>
+            <li><a onclick="showSection('customers')">Customers</a></li>
+            <li><a onclick="showSection('payments')">Payments</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <h1 id="section-title">Admin Dashboard</h1>
+
+        <div id="dashboard">
+            <div class="dashboard-cards">
+                <div class="card"><h3>Total Products</h3><p>150</p></div>
+                <div class="card"><h3>Total Orders</h3><p>320</p></div>
+                <div class="card"><h3>Total Customers</h3><p>210</p></div>
+            </div>
+            <div class="chart-container">
+                <canvas id="salesChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="barChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+
+        <div id="products" class="hidden"><h2>Products</h2><div id="products-list" class="section-list"></div></div>
+        <div id="categories" class="hidden"><h2>Categories</h2><div id="categories-list" class="section-list"></div></div>
+        <div id="orders" class="hidden"><h2>Orders</h2><div id="orders-list" class="section-list"></div></div>
+        <div id="customers" class="hidden"><h2>Customers</h2><div id="customers-list" class="section-list"></div></div>
+        <div id="payments" class="hidden"><h2>Payments</h2><div id="payments-list" class="section-list"></div></div>
+    </div>
+
+    <script>
+        async function fetchData(section) {
+            try {
+                const response = await fetch(`http://localhost:5000/api/${section}`);
+                if (!response.ok) throw new Error(`Failed to fetch ${section}: ${response.statusText}`);
+                return await response.json();
+            } catch (error) {
+                console.error(error);
+                return [];
+            }
+        }
+
+        async function loadSectionData(section) {
+            const list = document.getElementById(`${section}-list`);
+            if (!list) {
+                console.error(`List '${section}-list' not found.`);
+                return;
+            }
+
+            list.innerHTML = ""; // Clear previous content
+
+            const data = await fetchData(section);
+
+            data.forEach(item => {
+                const div = document.createElement("div");
+                div.classList.add("section-item");
+
+                if (section === "categories") {
+                    div.innerHTML = `<h3>${item.name}</h3><p>${item.description}</p>`;
+                } else if (section === "orders") {
+                    div.innerHTML = `<h3>Order ID: ${item.orderId}</h3><p>Customer: ${item.customer.name}</p><p>Total: ₹${item.totalPrice}</p>`;
+                } else if (section === "products") {
+                    div.innerHTML = `<h3>${item.name}</h3><p>${item.description}</p><p>Price: ₹${item.price}</p><img src="http://localhost:5000${item.image}" alt="${item.name}">`;
+                } else if (section === "customers") {
+                    div.innerHTML = `<h3>${item.name}</h3><p>Email: ${item.email}</p>`;
+                } else if (section === "payments") {
+                    div.innerHTML = `<h3>Payment ID: ${item.paymentId}</h3><p>Total Amount: ₹${item.totalAmount}</p>`;
+                }
+
+                list.appendChild(div);
+            });
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('.main-content > div').forEach(div => div.classList.add('hidden'));
+            document.getElementById(section).classList.remove('hidden');
+            document.getElementById("section-title").textContent = section.charAt(0).toUpperCase() + section.slice(1);
+            loadSectionData(section);
+        }
+
+        function renderChart() {
+        const ctxLine = document.getElementById('salesChart').getContext('2d');
+        new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May'],
+                datasets: [{
+                    label: 'Sales Revenue (₹)',
+                    data: [1200, 2500, 3200, 2800, 4000],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderWidth: 2,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Bar Chart
+        const ctxBar = document.getElementById('barChart').getContext('2d');
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                datasets: [{
+                    label: 'Monthly Orders',
+                    data: [30, 45, 60, 50, 80],
+                    backgroundColor: ['#3498db', '#e74c3c', '#2ecc71', '#f1c40f', '#9b59b6']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Pie Chart
+        const ctxPie = document.getElementById('pieChart').getContext('2d');
+        new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: ['Rings', 'Bracelets', 'Necklaces', 'Earrings'],
+                datasets: [{
+                    label: 'Category Sales',
+                    data: [5000, 3000, 4000, 2000],
+                    backgroundColor: ['#1abc9c', '#3498db', '#e74c3c', '#9b59b6']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    }
+
+        window.onload = () => {
+            showSection("dashboard");
+            renderChart();
+        };
+    </script>
+</body>
+</html>

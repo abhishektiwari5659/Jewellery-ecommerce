@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Jewelry E-Commerce</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="uploads/logo.jpg" alt="Jewelry Store Logo">
+            </div>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="category.html">Category</a></li>
+                </ul>
+            </nav>
+            <div class="icons">
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+                <a href="profile.html" id="profile-link" style="display: none;"><i class="fas fa-user-circle"></i> Profile</a>
+                <a href="#" id="logout-link" style="display: none;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a href="signup.html" id="signup-link"><i class="fas fa-sign-in-alt"></i> Sign Up</a>
+                <a href="login.html" id="login-link"><i class="fas fa-user"></i> Login</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="profile">
+            <h2>Your Profile</h2>
+            <p id="user-info">Loading...</p>
+            <button id="logout-btn" class="btn" style="display: none;">Logout</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Jewelry Store. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Check if the user is logged in
+        function checkLoginStatus() {
+            const token = localStorage.getItem('token');
+            const profileLink = document.getElementById('profile-link');
+            const logoutLink = document.getElementById('logout-link');
+            const loginLink = document.getElementById('login-link');
+            const signupLink = document.getElementById('signup-link');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            if (token) {
+                profileLink.style.display = 'inline';
+                logoutLink.style.display = 'inline';
+                loginLink.style.display = 'none';
+                signupLink.style.display = 'none';
+                logoutBtn.style.display = 'inline';
+
+                // Fetch user details
+                fetch('/api/profile', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
+                    .then(response => {
+                        if (response.ok) return response.json();
+                        throw new Error('Session expired');
+                    })
+                    .then(data => {
+                        document.getElementById('user-info').innerText = `Welcome, ${data.name}`;
+                    })
+                    .catch(error => {
+                        console.error('Profile fetch error:', error);
+                        localStorage.removeItem('token'); // Clear token on error
+                        window.location.href = 'login.html';
+                    });
+            } else {
+                profileLink.style.display = 'none';
+                logoutLink.style.display = 'none';
+                loginLink.style.display = 'inline';
+                signupLink.style.display = 'inline';
+                logoutBtn.style.display = 'none';
+                document.getElementById('user-info').innerText = 'Please log in to view your profile.';
+            }
+        }
+
+        // Logout function
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            localStorage.removeItem('token'); // Clear token
+            window.location.href = 'index.html'; // Redirect to home
+        });
+
+        // Run the login status check
+        checkLoginStatus();
+    </script>
+</body>
+</html>

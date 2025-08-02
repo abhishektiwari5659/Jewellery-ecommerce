@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Manage Products & Categories</title>
+    <style>
+       /* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    background: #f4f6f9;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 260px;
+    background: #1e1e2f;
+    color: #fff;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar h2 {
+    font-size: 20px;
+    margin-bottom: 25px;
+    text-align: center;
+    font-weight: bold;
+    color: #00d4ff;
+    letter-spacing: 1px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 12px;
+}
+
+.sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    padding: 12px;
+    background: #2a2a3a;
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+    background: #00d4ff;
+    color: #1e1e2f;
+    box-shadow: 0px 0px 8px rgba(0, 212, 255, 0.7);
+    transform: translateY(-2px);
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 260px;
+    padding: 30px;
+    width: calc(100% - 260px);
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Form & Inputs */
+.form-container {
+    margin: 20px auto;
+    max-width: 600px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-container input,
+.form-container select {
+    width: calc(100% - 20px);
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+}
+
+.form-container input:focus,
+.form-container select:focus {
+    border-color: #00d4ff;
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+}
+
+/* Buttons */
+.form-container button {
+    padding: 12px 20px;
+    background-color: #00a8ff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.form-container button:hover {
+    background-color: #007bff;
+    transform: scale(1.05);
+}
+
+/* Table Styling */
+.list-container {
+    margin: 20px auto;
+    max-width: 1000px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+.list-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.list-container th,
+.list-container td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.list-container th {
+    background: #f1f1f1;
+    color: #333;
+    font-weight: bold;
+}
+
+.list-container tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.list-container tr:hover {
+    background: #00d4ff;
+    color: white;
+    transition: 0.3s;
+}
+
+/* Action Buttons */
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.actions button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.actions .edit-btn {
+    background-color: #ffc107;
+    color: #fff;
+}
+
+.actions .delete-btn {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.actions button:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+}
+
+/* Loading Indicator */
+.loading {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: #28a745;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .sidebar ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .sidebar ul li {
+        flex: 1 1 45%;
+        margin: 5px;
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .list-container {
+        max-width: 100%;
+    }
+}
+
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <h2>Admin Menu</h2>
+        <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="#products">Products</a></li>
+            <ul>
+                <li><a href="#productName">Add New Product</a></li>
+                <li><a href="#manage-products">Manage Products</a></li>
+                <li><a href="#productTableBody">View All Products</a></li>
+            </ul>
+            <li><a href="#categoryTableBody">Categories</a></li>
+            <ul>
+                <li><a href="#categoryId">Add New Category</a></li>
+                <li><a href="#categoryTableBody">Manage Categories</a></li>
+            </ul>
+            <li><a href="index.html">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <h1>Admin Panel - Manage Products & Categories</h1>
+        <div class="loading" id="loadingIndicator">Loading...</div>
+
+        <!-- Category Form -->
+        <div class="form-container">
+            <h2>Add / Edit Category</h2>
+            <input type="hidden" id="categoryId">
+            <input type="text" id="categoryName" placeholder="Category Name" required>
+            <textarea id="categoryDescription" placeholder="Category Description" rows="3"></textarea>
+            <button onclick="saveCategory()">Save Category</button>
+        </div>
+
+        <!-- Category List -->
+        <div class="list-container">
+            <h2>Category List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="categoryTableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Product Form -->
+        <div class="form-container">
+            <h2>Add / Edit Product</h2>
+            <input type="hidden" id="productId">
+            <input type="text" id="productName" placeholder="Product Name" required>
+            <input type="text" id="productDescription" placeholder="Product Description">
+            <input type="number" id="productPrice" placeholder="Product Price" required>
+            <select id="productStatus" required>
+                <option value="available">Available</option>
+                <option value="out of stock">Out of Stock</option>
+            </select>
+            <input type="file" id="productImage" accept="image/*" onchange="previewImage()">
+            <img id="imagePreview" style="display:none; width: 100px; margin-top: 10px;">
+            <button onclick="saveProduct()">Save Product</button>
+        </div>
+
+        <!-- Product List -->
+        <div class="list-container">
+            <h2>Product List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Image</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="productTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const categoryApiUrl = 'http://localhost:5000/api/categories';
+        const productApiUrl = 'http://localhost:5000/api/products';
+
+        function showLoadingIndicator() {
+            document.getElementById('loadingIndicator').style.display = 'block';
+        }
+
+        function hideLoadingIndicator() {
+            document.getElementById('loadingIndicator').style.display = 'none';
+        }
+
+        // Fetch and display categories
+        async function fetchCategories() {
+            showLoadingIndicator();
+            const response = await fetch(categoryApiUrl);
+            const categories = await response.json();
+            const categoryTableBody = document.getElementById('categoryTableBody');
+            categoryTableBody.innerHTML = '';
+
+            categories.forEach(category => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${category.name}</td>
+                    <td>${category.description}</td>
+                    <td class="actions">
+                        <button class="edit-btn" onclick="editCategory('${category._id}')">Edit</button>
+                        <button class="delete-btn" onclick="deleteCategory('${category._id}')">Delete</button>
+                    </td>
+                `;
+                categoryTableBody.appendChild(row);
+            });
+            hideLoadingIndicator();
+        }
+
+        // Save a category (add or edit)
+        async function saveCategory() {
+            const categoryId = document.getElementById('categoryId').value;
+            const categoryName = document.getElementById('categoryName').value;
+            const categoryDescription = document.getElementById('categoryDescription').value;
+
+            const formData = {
+                name: categoryName,
+                description: categoryDescription,
+            };
+
+            const method = categoryId ? 'PUT' : 'POST'; // Use PUT for editing, POST for new categories
+            const url = categoryId ? `${categoryApiUrl}/${categoryId}` : categoryApiUrl;
+
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                alert('Category saved successfully!');
+                document.getElementById('categoryId').value = '';
+                document.getElementById('categoryName').value = '';
+                document.getElementById('categoryDescription').value = '';
+                fetchCategories(); // Refresh the category list
+            } else {
+                alert('Failed to save category.');
+            }
+        }
+
+        // Preview uploaded image
+        function previewImage() {
+            const file = document.getElementById('productImage').files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('imagePreview').src = e.target.result;
+                document.getElementById('imagePreview').style.display = 'block';
+            };
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                document.getElementById('imagePreview').style.display = 'none';
+            }
+        }
+
+        // Fetch and display products
+        async function fetchProducts() {
+            showLoadingIndicator();
+            const response = await fetch(productApiUrl);
+            const products = await response.json();
+            const productTableBody = document.getElementById('productTableBody');
+            productTableBody.innerHTML = '';
+
+            products.forEach(product => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>${product.description}</td>
+                    <td>${product.price}</td>
+                    <td>${product.status}</td>
+                    <td><img src="${product.image}" style="width:50px;"/></td>
+                    <td class="actions">
+                        <button class="edit-btn" onclick="editProduct('${product._id}')">Edit</button>
+                        <button class="delete-btn" onclick="deleteProduct('${product._id}')">Delete</button>
+                    </td>
+                `;
+                productTableBody.appendChild(row);
+            });
+            hideLoadingIndicator();
+        }
+
+        async function saveProduct() {
+            const productId = document.getElementById('productId').value;
+            const productName = document.getElementById('productName').value;
+            const productDescription = document.getElementById('productDescription').value;
+            const productPrice = document.getElementById('productPrice').value;
+            const productStatus = document.getElementById('productStatus').value;
+            const productImage = document.getElementById('productImage').files[0];
+
+            const formData = new FormData();
+            formData.append('name', productName);
+            formData.append('description', productDescription);
+            formData.append('price', productPrice);
+            formData.append('status', productStatus);
+            if (productImage) {
+                formData.append('image', productImage);
+            }
+
+            const method = productId ? 'PUT' : 'POST'; // Use PUT for editing, POST for new products
+            const url = productId ? `${productApiUrl}/${productId}` : `${productApiUrl}/add-product`;
+
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    body: formData, // Directly send formData
+                });
+
+                if (response.ok) {
+                    alert('Product saved successfully!');
+                    // Reset form fields
+                    document.getElementById('productId').value = '';
+                    document.getElementById('productName').value = '';
+                    document.getElementById('productDescription').value = '';
+                    document.getElementById('productPrice').value = '';
+                    document.getElementById('productStatus').value = 'available';
+                    document.getElementById('productImage').value = '';
+                    document.getElementById('imagePreview').style.display = 'none';
+                    fetchProducts(); // Refresh the product list
+                } else {
+                    const error = await response.json();
+                    alert('Failed to save product: ' + error.message);
+                }
+            } catch (error) {
+                console.error('Error saving product:', error);
+                alert('Failed to save product due to a network error.');
+            }
+        }
+        async function editProduct(productId) {
+            showLoadingIndicator(); // Show loading indicator while fetching data
+
+            try {
+                const response = await fetch(`${productApiUrl}/${productId}`); // Fetch the product details
+                if (!response.ok) throw new Error('Failed to fetch product details.');
+
+                const product = await response.json(); // Parse the response as JSON
+
+                // Populate the form fields with the fetched product data
+                document.getElementById('productId').value = product._id;
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productDescription').value = product.description;
+                document.getElementById('productPrice').value = product.price;
+                document.getElementById('productStatus').value = product.status;
+
+                // Optionally set the image preview
+                document.getElementById('imagePreview').src = product.image;
+                document.getElementById('imagePreview').style.display = 'block';
+
+                hideLoadingIndicator(); // Hide loading indicator after fetching
+            } catch (error) {
+                console.error('Error fetching product details:', error);
+                alert('Failed to fetch product details.');
+                hideLoadingIndicator(); // Hide loading indicator on error
+            }
+        }
+
+        async function deleteProduct(productId) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                const response = await fetch(`${productApiUrl}/${productId}`, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    alert('Product deleted successfully!');
+                    fetchProducts(); // Refresh the product list
+                } else {
+                    alert('Failed to delete product.');
+                }
+            }
+        }
+
+
+        async function editCategory(categoryId) {
+            showLoadingIndicator(); // Show loading indicator while fetching data
+
+            try {
+                const response = await fetch(`${categoryApiUrl}/${categoryId}`); // Fetch the category details
+                if (!response.ok) throw new Error('Failed to fetch category details.');
+
+                const category = await response.json(); // Parse the response as JSON
+
+                // Populate the form fields with the fetched category data
+                document.getElementById('categoryId').value = category._id;
+                document.getElementById('categoryName').value = category.name;
+                document.getElementById('categoryDescription').value = category.description;
+
+                hideLoadingIndicator(); // Hide loading indicator after fetching
+            } catch (error) {
+                console.error('Error fetching category details:', error);
+                alert('Failed to fetch category details.');
+                hideLoadingIndicator(); // Hide loading indicator on error
+            }
+        }
+
+        async function deleteCategory(categoryId) {
+            if (confirm('Are you sure you want to delete this category?')) {
+                const response = await fetch(`${categoryApiUrl}/${categoryId}`, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    alert('Category deleted successfully!');
+                    fetchCategories(); // Refresh the category list
+                } else {
+                    alert('Failed to delete category.');
+                }
+            }
+        }
+
+        // Initialize the app
+        window.onload = function () {
+            fetchCategories();
+            fetchProducts();
+        };
+    </script>
+
+
+</body>
+
+</html>

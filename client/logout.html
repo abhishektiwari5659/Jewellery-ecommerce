@@ -1,0 +1,13 @@
+<!-- logout.html -->
+<script>
+    // Check if the user is logged in
+    const token = localStorage.getItem('token');
+    if (!token) {
+        // If not logged in, redirect to the login page
+        window.location.href = 'login.html';
+    } else {
+        // If logged in, clear the token and redirect to the homepage
+        localStorage.removeItem('token');
+        window.location.href = 'index.html';
+    }
+</script>
