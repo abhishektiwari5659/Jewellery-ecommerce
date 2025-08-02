@@ -38,16 +38,6 @@ A full-stack e-commerce platform for buying and managing jewellery, built with N
 
 ## 🔗 Folder Structure
 ---
-
-<<<<<<< HEAD
-- jewellery-ecommerce/
-├── admin/ # Admin dashboard files
-├── client/ # Frontend website
-├── server/ # Backend logic and API routes
-│ ├── uploads/ # Uploaded product images (1.3GB+, excluded via .gitignore)
-│ └── .env # Environment variables (not shared)
-├── node_modules/ 
-=======
 ```
 jewellery-ecommerce/
 ├── admin/          # Admin dashboard files
@@ -56,7 +46,6 @@ jewellery-ecommerce/
 │   ├── uploads/    # Uploaded product images (1.3GB+, excluded via .gitignore)
 │   └── .env        # Environment variables (not shared)
 ├── node_modules/
->>>>>>> 66788df (Add formatted README)
 ├── .gitignore
 ├── .env.example
 ├── README.md
