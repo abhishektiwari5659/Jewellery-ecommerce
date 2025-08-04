@@ -115,4 +115,4 @@ See `.env.example` for the required structure.
 
 For any queries or collaboration requests:  
 📧 **abhishekti5659@gmail.com**  
-🔗 GitHub: [@abhishektiwai5659](https://github.com/abhishektiwai5659)
+🔗 GitHub: [@abhishektiwari5659](https://github.com/abhishektiwari5659)
